@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "alwaysStrict": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "listEmittedFiles": true,
+        "listFiles": false,
+        "newLine": "lf",
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": "assets/",
+        "preserveConstEnums": true,
+        "pretty": false,
+        "removeComments": true,
+        "strictNullChecks": true,
+        "sourceMap": false,
+        "target": "es5"
+    },
+    "include": [
+        "src/**/**.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
