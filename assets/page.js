@@ -10,12 +10,13 @@ var Application = (function () {
         this.se = document.getElementById('ElmSe');
         this.setBgm(this.cookie.getAttribute('bgm') === 'true');
         document.getElementById('S7i').addEventListener('click', (function () { return _this.click(); }));
+        document.querySelector('.card > .card-block').addEventListener('click', (function () { return _this.click(); }));
         document.getElementById('Bgm').addEventListener('click', (function () { return _this.toggleBgm(); }));
         window.addEventListener('keydown', (function (e) { return _this.keyEvents(e); }));
     }
     Application.prototype.click = function () {
         this.counter++;
-        document.getElementById('Count').innerText = this.counter.toString();
+        document.getElementById('Count').innerText = '' + this.counter;
         this.se.currentTime = 0;
         this.se.play();
     };

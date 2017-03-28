@@ -17,12 +17,13 @@ class Application {
     this.se  = document.getElementById('ElmSe')!  as HTMLAudioElement
     this.setBgm(this.cookie.getAttribute('bgm')==='true')
     document.getElementById('S7i')!.addEventListener('click', (()=>this.click()))
+    document.querySelector('.card > .card-block')!.addEventListener('click', (()=>this.click()))
     document.getElementById('Bgm')!.addEventListener('click', (()=>this.toggleBgm()))
     window.addEventListener('keydown', ((e:any)=>this.keyEvents(e)))
   }
   private click() {
     this.counter++
-    document.getElementById('Count')!.innerText = this.counter.toString()
+    document.getElementById('Count')!.innerText = '' + this.counter
     this.se.currentTime = 0
     this.se.play()
   }
