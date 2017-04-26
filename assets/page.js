@@ -41,37 +41,44 @@ class Application {
 class ApplicationR extends React.Component {
     constructor(props) {
         super(props);
-        this.incrementCount = () => {
-            this.setState({ counter: this.counter++ });
-            console.log(this.state.counter);
+        this.doSisiodosi = () => {
+            this.setState({ counter: this.state.counter + 1 });
+            this.sisiodosi.currentTime = 0;
+            this.sisiodosi.play();
+            this.cookie.setAttribute('sisioCount', this.state.counter);
         };
-        this._onKeyDown = (e) => {
+        this.keyEvents = (e) => {
             e.preventDefault();
             if (e.key === ' ')
-                this.incrementCount();
+                this.doSisiodosi();
             if (e.key === 'b') { }
         };
+        this.cookie = new Cookie();
         this.state = {
-            counter: 0,
+            counter: parseInt(this.cookie.getAttribute('sisioCount') || '0'),
             isPlayBgm: false
         };
-        this.counter = 0;
+        this.sisiodosi = document.getElementsByTagName('audio')[0];
+        window.addEventListener('keydown', ((e) => this.keyEvents(e)));
     }
     render() {
-        return (React.createElement("div", { className: "card mx-auto my-5", style: { maxWidth: "600px" }, onKeyDown: this._onKeyDown },
-            React.createElement(Sisiodosi, { onClick: this.incrementCount }),
+        return (React.createElement("div", { className: "card mx-auto my-5", style: { maxWidth: "600px" } },
+            React.createElement(Sisiodosi, { onClick: this.doSisiodosi, counter: this.state.counter }),
             React.createElement(FooterBgm, null)));
     }
 }
 class Sisiodosi extends React.Component {
     constructor(props) {
         super(props);
-        this._onClick = (_) => {
+        this._onClick = () => {
             this.props.onClick();
         };
     }
     render() {
-        return (React.createElement("img", { src: 'http://placehold.it/100x100/', onClick: this._onClick }));
+        return (React.createElement("div", { onClick: this._onClick },
+            React.createElement("img", { className: 'card-img-top w-100', src: 'assets/s7i.png' }),
+            React.createElement("p", { className: 'card-block text-center lh-1 m-0', style: { fontSize: "4rem" } }, this.props.counter),
+            React.createElement("audio", { src: "assets/se.wav" })));
     }
 }
 class FooterBgm extends React.Component {
@@ -82,7 +89,7 @@ class FooterBgm extends React.Component {
     }
     render() {
         return (React.createElement("footer", { className: "card-footer text-center text-mute", onClick: this._onClick },
-            React.createElement("p", { className: "m-0" }, "bgm: on/off"),
+            React.createElement("p", { className: "m-0" }, "bgm: off only"),
             React.createElement("audio", { id: "ElmBgm", src: "assets/bg.mp3", loop: true })));
     }
 }
@@ -104,6 +111,7 @@ class Cookie {
     }
     init() {
         this.setAttribute('sisiodosi', 'wabisabi');
+        this.setAttribute('sisioCount', Math.floor(Math.random() * 20));
         this.removeAttribute('');
     }
     pullAttributes() {

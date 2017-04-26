@@ -48,24 +48,29 @@ class Application {
 
 
 class ApplicationR extends React.Component<any, any> {
-  private counter :number
+  private sisiodosi :HTMLAudioElement
+  private cookie :Cookie
 
   constructor(props:any) {
     super(props)
+    this.cookie = new Cookie()
     this.state = {
-      counter  : 0,
+      counter  : parseInt(this.cookie.getAttribute('sisioCount') || '0'),
       isPlayBgm: false
     }
-    this.counter = 0
+    this.sisiodosi = document.getElementsByTagName('audio')[0]
+    window.addEventListener('keydown', ((e:any)=>this.keyEvents(e)))
   }
 
-  incrementCount = () => {
-    this.setState({ counter: this.counter++ })
-    console.log(this.state.counter)
+  doSisiodosi = () => {
+    this.setState({ counter: this.state.counter+1 })
+    this.sisiodosi.currentTime = 0
+    this.sisiodosi.play()
+    this.cookie.setAttribute('sisioCount', this.state.counter)
   }
-  _onKeyDown = (e:any) => {
+  keyEvents = (e :KeyboardEvent) => {
     e.preventDefault()
-    if(e.key === ' ') this.incrementCount()
+    if(e.key === ' ') this.doSisiodosi()
     if(e.key === 'b') {}
   }
 
@@ -74,9 +79,8 @@ class ApplicationR extends React.Component<any, any> {
       <div
         className="card mx-auto my-5"
         style={{maxWidth: "600px"}}
-        onKeyDown={this._onKeyDown}
       >
-        <Sisiodosi onClick={this.incrementCount} />
+        <Sisiodosi onClick={this.doSisiodosi} counter={this.state.counter} />
         <FooterBgm />
       </div>
     )
@@ -91,16 +95,27 @@ class Sisiodosi extends React.Component<any, any> {
     super(props)
   }
 
-  _onClick = (_:any) => {
+  _onClick = () => {
     this.props.onClick()
   }
 
   render() {
     return (
-      <img
-        src='http://placehold.it/100x100/'
+      <div
         onClick={this._onClick}
-      />
+      >
+        <img
+          className='card-img-top w-100'
+          src='assets/s7i.png'
+        />
+        <p
+          className='card-block text-center lh-1 m-0'
+          style={{fontSize: "4rem"}}
+        >
+          {this.props.counter}
+        </p>
+        <audio src="assets/se.wav"></audio>
+      </div>
     )
   }
 }
@@ -121,10 +136,8 @@ class FooterBgm extends React.Component<any, any> {
         className="card-footer text-center text-mute"
         onClick={this._onClick}
       >
-        <p
-          className="m-0"
-        >
-          bgm: on/off
+        <p className="m-0">
+          bgm: off only
         </p>
         <audio
           id="ElmBgm"
@@ -157,6 +170,7 @@ class Cookie {
   }
   private init() {
     this.setAttribute('sisiodosi', 'wabisabi')
+    this.setAttribute('sisioCount', Math.floor(Math.random()*20))
     this.removeAttribute('')
   }
   pullAttributes() {
