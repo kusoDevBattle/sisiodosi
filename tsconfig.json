@@ -23,11 +23,12 @@
         "pretty": false,
         "removeComments": true,
         "strictNullChecks": true,
-        "sourceMap": false,
-        "target": "es5"
+        "sourceMap": true,
+        "target": "es6"
     },
     "include": [
-        "src/**/**.ts"
+        "src/**/**.ts",
+        "src/**/**.tsx"
     ],
     "exclude": [
         "node_modules"

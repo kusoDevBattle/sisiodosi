@@ -6,6 +6,8 @@
 	<title>s(isiodos)i</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/page.css">
+	<script src="https://unpkg.com/react@15/dist/react.js"></script>
+	<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
 	<script src="assets/page.js" defer></script>
 </head>
 <body>
@@ -14,10 +16,12 @@
 
 <section>
 <div class="card mx-auto my-5" style="max-width:600px">
-	<img id="S7i" class="card-img-top" src="assets/s7i.png" width="100%">
-	<div class="card-block text-center">
-		<p id="Count" class="count">0</p>
-		<audio id="ElmSe" src="assets/se.wav"></audio>
+	<div>
+		<img id="S7i" class="card-img-top" src="assets/s7i.png" width="100%">
+		<div class="card-block text-center">
+			<p id="Count" class="count">0</p>
+			<audio id="ElmSe" src="assets/se.wav"></audio>
+		</div>
 	</div>
 	<footer class="card-footer text-center text-mute">
 		<p id="Bgm" class="m-0">bgm: on/off<!--TODO: オンオフ表示用のアイコン入れたい <span></span>--></p>
@@ -26,6 +30,8 @@
 </div>
 </section>
 
+
+<div id="app"></div>
 
 
 </body>

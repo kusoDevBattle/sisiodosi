@@ -1,5 +1,5 @@
-document.addEventListener('contextmenu', ()=>event!.preventDefault())
-document.addEventListener('DOMContentLoaded', ()=>new Application())
+document.addEventListener('contextmenu', e=>e.preventDefault())
+// document.addEventListener('DOMContentLoaded', _=>new Application())
 
 
 
@@ -47,6 +47,95 @@ class Application {
 
 
 
+class ApplicationR extends React.Component<any, any> {
+  private counter :number
+
+  constructor(props:any) {
+    super(props)
+    this.state = {
+      counter  : 0,
+      isPlayBgm: false
+    }
+    this.counter = 0
+  }
+
+  incrementCount = () => {
+    this.setState({ counter: this.counter++ })
+    console.log(this.state.counter)
+  }
+  _onKeyDown = (e:any) => {
+    e.preventDefault()
+    if(e.key === ' ') this.incrementCount()
+    if(e.key === 'b') {}
+  }
+
+  render() {
+    return (
+      <div
+        className="card mx-auto my-5"
+        style={{maxWidth: "600px"}}
+        onKeyDown={this._onKeyDown}
+      >
+        <Sisiodosi onClick={this.incrementCount} />
+        <FooterBgm />
+      </div>
+    )
+  }
+}
+
+
+
+class Sisiodosi extends React.Component<any, any> {
+
+  constructor(props:any) {
+    super(props)
+  }
+
+  _onClick = (_:any) => {
+    this.props.onClick()
+  }
+
+  render() {
+    return (
+      <img
+        src='http://placehold.it/100x100/'
+        onClick={this._onClick}
+      />
+    )
+  }
+}
+
+class FooterBgm extends React.Component<any, any> {
+
+  constructor(props:any) {
+    super(props)
+  }
+
+  _onClick = () => {
+
+  }
+
+  render() {
+    return (
+      <footer
+        className="card-footer text-center text-mute"
+        onClick={this._onClick}
+      >
+        <p
+          className="m-0"
+        >
+          bgm: on/off
+        </p>
+        <audio
+          id="ElmBgm"
+          src="assets/bg.mp3"
+          loop
+        ></audio>
+      </footer>
+    )
+  }
+}
+
 
 
 class Cookie {
@@ -89,3 +178,6 @@ class Cookie {
     document.cookie = key + '=' + val + ';'
   }
 }
+
+
+ReactDOM.render(<ApplicationR />, document.getElementById('app'))
