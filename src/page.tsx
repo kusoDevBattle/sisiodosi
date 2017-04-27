@@ -1,52 +1,3 @@
-document.addEventListener('contextmenu', e=>e.preventDefault())
-// document.addEventListener('DOMContentLoaded', _=>new Application())
-
-
-
-
-
-class Application {
-  private cookie :Cookie
-  private counter :number
-  private bgm :HTMLAudioElement
-  private se  :HTMLAudioElement
-  constructor() {
-    this.cookie = new Cookie()
-    this.counter = 0
-    this.bgm = document.getElementById('ElmBgm')! as HTMLAudioElement
-    this.se  = document.getElementById('ElmSe')!  as HTMLAudioElement
-    this.setBgm(this.cookie.getAttribute('bgm')==='true')
-    document.getElementById('S7i')!.addEventListener('click', (()=>this.click()))
-    document.querySelector('.card > .card-block')!.addEventListener('click', (()=>this.click()))
-    document.getElementById('Bgm')!.addEventListener('click', (()=>this.toggleBgm()))
-    window.addEventListener('keydown', ((e:any)=>this.keyEvents(e)))
-  }
-  private click() {
-    this.counter++
-    document.getElementById('Count')!.innerText = '' + this.counter
-    this.se.currentTime = 0
-    this.se.play()
-  }
-  private keyEvents(e :KeyboardEvent) {
-    e.preventDefault()
-    if(e.key === ' ') this.click()
-    if(e.key === 'b') this.toggleBgm()
-  }
-  private toggleBgm() {
-    this.setBgm(this.bgm.paused || this.bgm.ended)
-  }
-  private setBgm(doPlay:boolean) {
-    this.cookie.setAttribute('bgm', doPlay)
-    if(doPlay) {
-      this.bgm.play()
-    }else{
-      this.bgm.pause()
-    }
-  }
-}
-
-
-
 class ApplicationR extends React.Component<any, any> {
   private sisiodosi :HTMLAudioElement
   private cookie :Cookie
@@ -54,24 +5,29 @@ class ApplicationR extends React.Component<any, any> {
   constructor(props:any) {
     super(props)
     this.cookie = new Cookie()
+    this.cookie.setAttribute('sisioCount', this.cookie.getAttribute('sisioCount') || '0', true)
+    this.cookie.setAttribute('bgm', this.cookie.getAttribute('bgm') || 'false', true)
+
     this.state = {
-      counter  : parseInt(this.cookie.getAttribute('sisioCount') || '0'),
-      isPlayBgm: false
+      counter  : parseInt(this.cookie.getAttribute('sisioCount')!)
     }
+  }
+  componentDidMount() {
     this.sisiodosi = document.getElementsByTagName('audio')[0]
-    window.addEventListener('keydown', ((e:any)=>this.keyEvents(e)))
+
+    document.addEventListener('contextmenu', e=>e.preventDefault())
+    window.addEventListener('keydown', e=>this.keyEvents(e))
   }
 
   doSisiodosi = () => {
     this.setState({ counter: this.state.counter+1 })
     this.sisiodosi.currentTime = 0
     this.sisiodosi.play()
-    this.cookie.setAttribute('sisioCount', this.state.counter)
+    this.cookie.setAttribute('sisioCount', this.state.counter, true)
   }
   keyEvents = (e :KeyboardEvent) => {
-    e.preventDefault()
     if(e.key === ' ') this.doSisiodosi()
-    if(e.key === 'b') {}
+    // if(e.key === 'b') (this.refs.bg as any).toggleBgm()
   }
 
   render() {
@@ -80,8 +36,8 @@ class ApplicationR extends React.Component<any, any> {
         className="card mx-auto my-5"
         style={{maxWidth: "600px"}}
       >
-        <Sisiodosi onClick={this.doSisiodosi} counter={this.state.counter} />
-        <FooterBgm />
+        <Sisiodosi asset={"s7i"} onClick={this.doSisiodosi} counter={this.state.counter} />
+        <FooterBgm asset={"bg.mp3"} cookie={this.cookie} ref="bg" />
       </div>
     )
   }
@@ -100,52 +56,80 @@ class Sisiodosi extends React.Component<any, any> {
   }
 
   render() {
+    let img = `assets/${this.props.asset}.png`
+    let se  = `assets/${this.props.asset}.wav`
     return (
       <div
         onClick={this._onClick}
       >
         <img
           className='card-img-top w-100'
-          src='assets/s7i.png'
+          src={img}
         />
         <p
           className='card-block text-center lh-1 m-0'
-          style={{fontSize: "4rem"}}
+          style={{
+            fontSize: "4rem",
+            overflow: "hidden"
+          }}
         >
           {this.props.counter}
         </p>
-        <audio src="assets/se.wav"></audio>
+        <audio src={se}></audio>
       </div>
     )
   }
 }
 
+
+
 class FooterBgm extends React.Component<any, any> {
+
+  private bgm :HTMLAudioElement
 
   constructor(props:any) {
     super(props)
+    this.state = {
+      isPlay: this.props.cookie.getAttribute('bgm') === 'true'
+    }
   }
 
-  _onClick = () => {
-
+  toggleBgm = () => {
+    this.setState({ isPlay: !this.state.isPlay })
+    const wilB = (this.state.isPlay)? 'false' : 'false'
+    this.props.cookie.setAttribute('bgm', wilB, true)
+    this.willPlay(!this.state.isPlay)
+  }
+  willPlay = (willPlay:boolean) => {
+    if(willPlay) {
+      this.bgm.play()
+    } else {
+      this.bgm.pause()
+    }
   }
 
   render() {
+    let isBgm = (this.state.isPlay)? `on`: `off`
+    let src = `assets/${this.props.asset}`
     return (
       <footer
         className="card-footer text-center text-mute"
-        onClick={this._onClick}
+        onClick={this.toggleBgm}
       >
         <p className="m-0">
-          bgm: off only
+          bgm: {isBgm}
         </p>
         <audio
-          id="ElmBgm"
-          src="assets/bg.mp3"
+          src={src}
           loop
+          ref="aux"
         ></audio>
       </footer>
     )
+  }
+  componentDidMount() {
+    this.bgm = this.refs.aux as HTMLAudioElement
+    if(this.state.isPlay) this.willPlay(true)
   }
 }
 
@@ -153,12 +137,11 @@ class FooterBgm extends React.Component<any, any> {
 
 class Cookie {
   private attrs :any
+  private expireUTC :string
   constructor() {
     this.attrs = {}
     this.init()
     this.pullAttributes()
-    let v = this.getAttribute('bgm') || 'false'
-    this.setAttribute('bgm', v)
   }
   getAttribute(key:string) :string|null {
     this.pullAttributes()
@@ -169,14 +152,15 @@ class Cookie {
     return this.attrs
   }
   private init() {
-    this.setAttribute('sisiodosi', 'wabisabi')
-    this.setAttribute('sisioCount', Math.floor(Math.random()*20))
+    const date = new Date(Date.now() + 14*24*60*60*1000)  //->14days
+    this.expireUTC = date.toUTCString()
+    this.setAttribute('expires', this.expireUTC)
     this.removeAttribute('')
   }
   pullAttributes() {
     let cookies = document.cookie.split(';')
     for(let i in cookies) {
-      let cookie = cookies[i].split('=')
+      let cookie = cookies[i].trim().split('=')
       this.attrs[cookie[0]] = cookie[1]
     }
   }
@@ -187,11 +171,13 @@ class Cookie {
     }
     document.cookie = cookies
   }
-  setAttribute(key:string, val:any) {
+  setAttribute(key:string, val:any, expire=false) {
+    let opt = (!expire)? '': `;expires=${this.expireUTC}`
     this.attrs[key] = val
-    document.cookie = key + '=' + val + ';'
+    document.cookie = key + '=' + val + opt
   }
 }
+
 
 
 ReactDOM.render(<ApplicationR />, document.getElementById('app'))
