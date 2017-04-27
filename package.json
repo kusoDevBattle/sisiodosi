@@ -1,0 +1,24 @@
+{
+  "name": "sisiodosi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Don't think, Feel.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kusoDevBattle/sisiodosi.git"
+  },
+  "author": "Sota SASAKI",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kusoDevBattle/sisiodosi/issues"
+  },
+  "homepage": "https://github.com/kusoDevBattle/sisiodosi#readme",
+  "devDependencies": {
+    "@types/react": "^15.0.22",
+    "@types/react-dom": "^15.5.0"
+  }
+}
