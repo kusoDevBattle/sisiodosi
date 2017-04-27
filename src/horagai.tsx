@@ -1,18 +1,18 @@
 /// <reference path="./Cookie.ts" />
 
 
-class ApplicationR extends React.Component<any, any> {
+class Horagai extends React.Component<any, any> {
   private sisiodosi :HTMLAudioElement
   private cookie :Cookie
 
   constructor(props:any) {
     super(props)
     this.cookie = new Cookie()
-    this.cookie.setAttribute('sisioCount', this.cookie.getAttribute('sisioCount') || '0', true)
+    this.cookie.setAttribute('horagCount', this.cookie.getAttribute('horagCount') || '0', true)
     this.cookie.setAttribute('bgm', this.cookie.getAttribute('bgm') || 'false', true)
 
     this.state = {
-      counter  : parseInt(this.cookie.getAttribute('sisioCount')!)
+      counter  : parseInt(this.cookie.getAttribute('horagCount')!)
     }
   }
   componentDidMount() {
@@ -26,7 +26,7 @@ class ApplicationR extends React.Component<any, any> {
     this.setState({ counter: this.state.counter+1 })
     this.sisiodosi.currentTime = 0
     this.sisiodosi.play()
-    this.cookie.setAttribute('sisioCount', this.state.counter, true)
+    this.cookie.setAttribute('horagCount', this.state.counter, true)
   }
   keyEvents = (e :KeyboardEvent) => {
     if(e.key === ' ') this.doSisiodosi()
@@ -39,8 +39,8 @@ class ApplicationR extends React.Component<any, any> {
         className="card mx-auto my-5"
         style={{maxWidth: "600px"}}
       >
-        <Sisiodosi asset={"s7i"} onClick={this.doSisiodosi} counter={this.state.counter} />
-        <FooterBgm asset={"bg.mp3"} cookie={this.cookie} ref="bg" />
+        <HoragaiImg asset={"h5i"} onClick={this.doSisiodosi} counter={this.state.counter} />
+        <HoragaiFooter asset={"bg.mp3"} cookie={this.cookie} ref="bg" />
       </div>
     )
   }
@@ -48,7 +48,7 @@ class ApplicationR extends React.Component<any, any> {
 
 
 
-class Sisiodosi extends React.Component<any, any> {
+class HoragaiImg extends React.Component<any, any> {
 
   constructor(props:any) {
     super(props)
@@ -86,7 +86,7 @@ class Sisiodosi extends React.Component<any, any> {
 
 
 
-class FooterBgm extends React.Component<any, any> {
+class HoragaiFooter extends React.Component<any, any> {
 
   private bgm :HTMLAudioElement
 
@@ -99,7 +99,7 @@ class FooterBgm extends React.Component<any, any> {
 
   toggleBgm = () => {
     this.setState({ isPlay: !this.state.isPlay })
-    const wilB = (this.state.isPlay)? 'false' : 'true'
+    const wilB = (this.state.isPlay)? 'false' : 'false'
     this.props.cookie.setAttribute('bgm', wilB, true)
     this.willPlay(!this.state.isPlay)
   }
@@ -140,4 +140,4 @@ class FooterBgm extends React.Component<any, any> {
 
 
 
-ReactDOM.render(<ApplicationR />, document.getElementById('app'))
+ReactDOM.render(<Horagai />, document.getElementById('horagai'))
