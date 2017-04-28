@@ -54,16 +54,12 @@ class Sisiodosi extends React.Component<any, any> {
     super(props)
   }
 
-  _onClick = () => {
-    this.props.onClick()
-  }
-
   render() {
     let img = `assets/${this.props.asset}.png`
     let se  = `assets/${this.props.asset}.wav`
     return (
       <div
-        onClick={this._onClick}
+        onClick={this.props.onClick}
       >
         <img
           className='card-img-top w-100'
